@@ -28,6 +28,8 @@ router.post("/api/auth/registration", async (req, res) => {
       await user.save();
       return res.status(201).json(user);
     } catch (err) {
+      console.log(err);
+
       return res.status(400).json({ message: err.message });
     }
   }
