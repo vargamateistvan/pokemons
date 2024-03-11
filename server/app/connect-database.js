@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 
 module.exports = async () => {
   // Connect to MongoDB
-  // TODO
-  // mongoose.connect("mongodb://mongo:27017/pokemon-db");
-
-  mongoose.connect("mongodb://127.0.0.1:27017/pokemon-db");
+  mongoose.connect("mongodb://mongo:27017/pokemon-db");
   mongoose.Promise = global.Promise;
   const db = mongoose.connection;
 

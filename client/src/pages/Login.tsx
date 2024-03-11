@@ -12,9 +12,8 @@ import { useNavigate } from "react-router-dom";
 import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
 
 const Login = () => {
-  // TODO
-  const [email, setEmail] = useState("asdasdasd@gmail.com");
-  const [password, setPassword] = useState("asdasdasd");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatchContext();
 
