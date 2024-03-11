@@ -1,6 +1,7 @@
-import { Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { PokemonType } from "../state/types";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import useStateContext from "../state/context/state/use-state-context";
 
 type Props = {
@@ -8,32 +9,36 @@ type Props = {
   index: number;
 };
 
-const Pokemon = ({ pokemon, index }: Props) => {
-  const { token } = useStateContext();
+const Pokemon = ({ pokemon }: Props) => {
+  const { myPokemons } = useStateContext();
+  const navigate = useNavigate();
 
-  const catchPokemon = async () => {
-    const response = await axios.post(
-      "http://localhost:8080/api/pokemon/catch",
-      {
-        name: pokemon.name,
-      },
-      { headers: { Authorization: token } }
-    );
-    console.log(response);
+  const hasPokemon = useMemo(
+    () => myPokemons.find((myPokemon) => myPokemon?.name === pokemon.name),
+    [myPokemons]
+  );
+
+  const goToDetails = () => {
+    navigate(`/pokemon/${pokemon.name}`);
   };
 
   return (
-    <Container>
-      <Typography>{pokemon.name}</Typography>
-      <img
+    <Container
+      sx={{ width: 150, height: 150, cursor: "pointer" }}
+      onClick={goToDetails}
+    >
+      {hasPokemon ? (
+        <Typography sx={{ color: "green" }}>{pokemon.name}</Typography>
+      ) : (
+        <Typography sx={{ color: "red" }}>{pokemon.name}</Typography>
+      )}
+
+      <Box
+        component="img"
+        sx={{ height: "auto", maxWidth: "100%" }}
         alt={pokemon.name}
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-          index + 1
-        }.png`}
-      ></img>
-      <Button variant="contained" size="medium" onClick={catchPokemon}>
-        Catch Pokemon
-      </Button>
+        src={`https://img.pokemondb.net/artwork/${pokemon.name}.jpg`}
+      ></Box>
     </Container>
   );
 };

@@ -6,11 +6,22 @@ import StateProvider from "./state/state-provider";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import MyPokemons from "./pages/MyPokemons";
+import PokemonDetail from "./pages/PokemonDetail";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    children: [],
+  },
+  {
+    path: "/my-pokemons",
+    element: <MyPokemons />,
+  },
+  {
+    path: "/pokemon/:name",
+    element: <PokemonDetail />,
   },
   {
     path: "/registration",

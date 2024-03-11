@@ -2,6 +2,7 @@ import { State } from "./types";
 
 export const STATE: State = {
   user: null,
-  token: null,
+  token: JSON.parse(localStorage.getItem("token")) | null,
   pokemons: [],
+  myPokemons: [],
 };

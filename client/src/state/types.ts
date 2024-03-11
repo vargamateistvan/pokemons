@@ -16,10 +16,12 @@ export type Action =
       user: User | null;
     }
   | { type: "LOGOUT" }
-  | { type: "SET_POKEMONS"; pokemons: PokemonType[] };
+  | { type: "SET_POKEMONS"; pokemons: PokemonType[] }
+  | { type: "SET_MY_POKEMONS"; myPokemons: PokemonType[] };
 
 export type State = {
   user: User;
   token: string;
   pokemons: PokemonType[];
+  myPokemons: PokemonType[];
 };

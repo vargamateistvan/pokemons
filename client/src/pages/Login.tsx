@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // TODO
+  const [email, setEmail] = useState("asdasdasd@gmail.com");
+  const [password, setPassword] = useState("asdasdasd");
   const navigate = useNavigate();
   const dispatch = useDispatchContext();
 
@@ -15,12 +16,12 @@ const Login = () => {
       email,
       password,
     });
-    console.log(response);
     dispatch({
       type: "SET_USER",
       user: response.data.user,
       token: response.data.token,
     });
+    localStorage.setItem("token", JSON.stringify(response.data.token));
     navigate("/");
   };
 

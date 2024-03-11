@@ -1,29 +1,26 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import useStateContext from "../state/context/state/use-state-context";
+import { Container } from "@mui/material";
+import axios from "axios";
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useStateContext from "../state/context/state/use-state-context";
 import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
-import axios from "axios";
-import { PokemonType } from "../state/types";
-import Pokemon from "../components/Pokemon";
+import Header from "../components/Header";
+import PokemonList from "../components/PokemonList";
+import PokemonSearch from "../components/PokemonSearch";
 
 const Home = () => {
-  const { user, pokemons } = useStateContext();
+  const { pokemons, token } = useStateContext();
   const dispatch = useDispatchContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!token) {
       return navigate("/login");
     }
 
     getPokemons();
-  }, [user]);
-
-  const logout = () => {
-    dispatch({ type: "LOGOUT" });
-    navigate("/login");
-  };
+    getMyPokemons();
+  }, [token]);
 
   const getPokemons = useCallback(async () => {
     const response = await axios.get(
@@ -33,31 +30,20 @@ const Home = () => {
     dispatch({ type: "SET_POKEMONS", pokemons });
   }, []);
 
+  const getMyPokemons = useCallback(async () => {
+    const response = await axios.get("http://localhost:8080/api/pokemons", {
+      headers: { Authorization: token },
+    });
+
+    const myPokemons = response.data.data;
+    dispatch({ type: "SET_MY_POKEMONS", myPokemons });
+  }, []);
+
   return (
     <Container>
-      <Box>
-        <Typography>Home</Typography>
-        <Button variant="contained" size="medium" onClick={logout}>
-          Logout
-        </Button>
-      </Box>
-      <Box>
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={3}
-        >
-          {pokemons?.map((pokemon: PokemonType, index: number) => {
-            return (
-              <Grid item key={index}>
-                <Pokemon key={index} pokemon={pokemon} index={index}></Pokemon>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
+      <Header />
+      {/* <PokemonSearch /> */}
+      <PokemonList pokemons={pokemons} />
     </Container>
   );
 };

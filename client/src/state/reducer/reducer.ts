@@ -26,6 +26,14 @@ const reducer = (state: State, action: Action) => {
       break;
     }
 
+    case "SET_MY_POKEMONS": {
+      state = {
+        ...state,
+        myPokemons: action.myPokemons,
+      };
+      break;
+    }
+
     default: {
       break;
     }
