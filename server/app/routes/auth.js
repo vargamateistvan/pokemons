@@ -5,7 +5,7 @@ const { User, validate } = require("../models/user");
 
 const router = Router();
 const SECRET = "pokemon";
-const jwtExpirySeconds = 300;
+const jwtExpirySeconds = 300000;
 
 router.post("/api/auth/registration", async (req, res) => {
   const { error } = validate(req.body);

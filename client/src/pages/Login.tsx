@@ -16,7 +16,11 @@ const Login = () => {
       password,
     });
     console.log(response);
-    dispatch({ type: "SET_USER", user: response.data.user });
+    dispatch({
+      type: "SET_USER",
+      user: response.data.user,
+      token: response.data.token,
+    });
     navigate("/");
   };
 

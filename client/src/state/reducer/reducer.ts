@@ -6,6 +6,7 @@ const reducer = (state: State, action: Action) => {
       state = {
         ...state,
         user: action.user,
+        token: action.token,
       };
       break;
     }
@@ -13,6 +14,14 @@ const reducer = (state: State, action: Action) => {
     case "LOGOUT": {
       state = {
         user: null,
+      };
+      break;
+    }
+
+    case "SET_POKEMONS": {
+      state = {
+        ...state,
+        pokemons: action.pokemons,
       };
       break;
     }

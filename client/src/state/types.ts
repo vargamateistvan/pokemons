@@ -4,8 +4,9 @@ type User = {
   id: string;
 };
 
-type Pokemon = {
+export type PokemonType = {
   name: string;
+  url: string;
 };
 
 export type Action =
@@ -14,9 +15,11 @@ export type Action =
       type: "SET_USER";
       user: User | null;
     }
-  | { type: "LOGOUT" };
+  | { type: "LOGOUT" }
+  | { type: "SET_POKEMONS"; pokemons: PokemonType[] };
 
 export type State = {
   user: User;
-  pokemons: Pokemon[];
+  token: string;
+  pokemons: PokemonType[];
 };
