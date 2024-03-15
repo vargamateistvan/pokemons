@@ -21,7 +21,6 @@ export type Action =
 
 export type State = {
   user: User;
-  token: string;
   pokemons: PokemonType[];
   myPokemons: PokemonType[];
 };

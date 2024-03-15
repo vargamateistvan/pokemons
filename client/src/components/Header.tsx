@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, Container, Divider } from "@mui/material";
 import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
 import { useNavigate } from "react-router-dom";
+import { cookieName, deleteCookieByName } from "../utils/cookie";
 
 const Header = () => {
   const dispatch = useDispatchContext();
@@ -8,6 +9,7 @@ const Header = () => {
 
   const logout = () => {
     dispatch({ type: "LOGOUT" });
+    deleteCookieByName(cookieName);
     navigate("/login");
   };
 

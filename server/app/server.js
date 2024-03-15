@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const history = require("connect-history-api-fallback");
 const cors = require("cors");
@@ -17,7 +18,9 @@ module.exports = (host, port) => {
 
   // Use CORS
   const corsOptions = {
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
+    exposedHeaders: ["Set-Cookie", "Date", "ETag"],
   };
 
   app.use(cors(corsOptions));
@@ -25,6 +28,7 @@ module.exports = (host, port) => {
   // Router config
   app.use(bodyParser.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
   app.use(bodyParser.json()); // Parse application/json
+  app.use(cookieParser());
 
   // Require routes
   app.use(auth);

@@ -14,7 +14,7 @@ const Pokemon = ({ pokemon }: Props) => {
   const navigate = useNavigate();
 
   const hasPokemon = useMemo(
-    () => myPokemons.find((myPokemon) => myPokemon?.name === pokemon.name),
+    () => myPokemons?.find((myPokemon) => myPokemon?.name === pokemon.name),
     [myPokemons]
   );
 

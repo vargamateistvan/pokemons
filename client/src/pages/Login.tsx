@@ -6,28 +6,34 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
+import { cookieName, getCookie } from "../utils/cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatchContext();
+
+  useEffect(() => {
+    if (getCookie(cookieName)) {
+      return navigate("/");
+    }
+  }, [navigate]);
 
   const login = async () => {
-    const response = await axios.post("http://localhost:8080/api/auth/login", {
-      email,
-      password,
-    });
-    dispatch({
-      type: "SET_USER",
-      user: response.data.user,
-      token: response.data.token,
-    });
-    localStorage.setItem("token", JSON.stringify(response.data.token));
+    await axios.post(
+      "http://localhost:8080/api/auth/login",
+      {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
     navigate("/");
   };
 

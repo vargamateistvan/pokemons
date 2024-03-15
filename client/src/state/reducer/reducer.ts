@@ -6,7 +6,6 @@ const reducer = (state: State, action: Action) => {
       state = {
         ...state,
         user: action.user,
-        token: action.token,
       };
       break;
     }

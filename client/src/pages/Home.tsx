@@ -7,20 +7,26 @@ import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
 import Header from "../components/Header";
 import PokemonList from "../components/PokemonList";
 import PokemonSearch from "../components/PokemonSearch";
+import { cookieName, getCookie } from "../utils/cookie";
 
 const Home = () => {
-  const { pokemons, token } = useStateContext();
+  const { pokemons } = useStateContext();
   const dispatch = useDispatchContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      return navigate("/login");
-    }
+  const getUserData = useCallback(async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/auth/user-data",
+      {
+        withCredentials: true,
+      }
+    );
 
-    getPokemons();
-    getMyPokemons();
-  }, [token]);
+    dispatch({
+      type: "SET_USER",
+      user: response.data.user,
+    });
+  }, []);
 
   const getPokemons = useCallback(async () => {
     const response = await axios.get(
@@ -32,12 +38,22 @@ const Home = () => {
 
   const getMyPokemons = useCallback(async () => {
     const response = await axios.get("http://localhost:8080/api/pokemons", {
-      headers: { Authorization: token },
+      withCredentials: true,
     });
 
     const myPokemons = response.data.data;
     dispatch({ type: "SET_MY_POKEMONS", myPokemons });
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!getCookie(cookieName)) {
+      return navigate("/login");
+    }
+
+    getUserData();
+    getPokemons();
+    getMyPokemons();
+  }, [navigate, getUserData, getPokemons, getMyPokemons]);
 
   return (
     <Container>

@@ -8,7 +8,7 @@ import useDispatchContext from "../state/context/dispatch/use-dispatch-context";
 
 const PokemonDetail = () => {
   const { name } = useParams();
-  const { token, myPokemons } = useStateContext();
+  const { myPokemons } = useStateContext();
   const dispatch = useDispatchContext();
   const [pokemon, setPokemon] = useState(null);
 
@@ -35,7 +35,7 @@ const PokemonDetail = () => {
       {
         name: name,
       },
-      { headers: { Authorization: token } }
+      { withCredentials: true }
     );
 
     getMyPokemons();
@@ -43,7 +43,7 @@ const PokemonDetail = () => {
 
   const releasePokemon = async () => {
     await axios.delete(`http://localhost:8080/api/pokemon/release/${name}`, {
-      headers: { Authorization: token },
+      withCredentials: true,
     });
 
     getMyPokemons();
@@ -51,7 +51,7 @@ const PokemonDetail = () => {
 
   const getMyPokemons = useCallback(async () => {
     const response = await axios.get("http://localhost:8080/api/pokemons", {
-      headers: { Authorization: token },
+      withCredentials: true,
     });
 
     const myPokemons = response.data.data;

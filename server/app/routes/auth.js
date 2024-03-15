@@ -2,6 +2,7 @@ const { Router } = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User, validate } = require("../models/user");
+const verifyToken = require("../middlewares/verifyToken");
 
 const router = Router();
 const SECRET = "pokemon";
@@ -57,24 +58,34 @@ router.post("/api/auth/login", async (req, res) => {
           .json({ message: "Incorrect email or password." });
       }
       const token = jwt.sign({ id: user._id }, SECRET);
-      res.cookie("token", token, {
-        httpOnly: true,
+      // TODO Production httpOnly: true, secure: true
+      res.cookie("pokemon-token-cookie", token, {
+        httpOnly: false,
         secure: false,
         sameSite: "strict",
         maxAge: jwtExpirySeconds * 1000,
       });
-      res.json({
-        message: "Successfully logged in",
-        token,
-        user: {
-          name: user.name,
-          id: user._id,
-          email: user.email,
-        },
-      });
+      res.send("Successfully logged in!");
     } catch (err) {
       return res.status(400).json({ message: err.message });
     }
+  }
+});
+
+router.get("/api/auth/user-data", verifyToken, async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.userId });
+
+    res.json({
+      message: "Successfully logged in",
+      user: {
+        name: user.name,
+        id: user._id,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
   }
 });
 
